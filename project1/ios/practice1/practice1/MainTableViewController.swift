@@ -66,22 +66,22 @@ class MainTableViewController: UITableViewController {
         request.httpMethod = "post"
        
         
-        let dataTask = URLSession(configuration: .default).uploadTask(with: request, from: ) {
-            (data: Data?, response: URLResponse?, error: Error?) in
-            guard error == nil else {
-                print("Error occur: \(String(describing: error))")
-                return
-            }
-            guard let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                return
-            }
-            guard let jsonToArray = try? JSONSerialization.jsonObject(with: data, options: []) else {
-                print("json to Any Error")
-                return
-            }
-            print(jsonToArray)
-       }
-       dataTask.resume()
+//        let dataTask = URLSession(configuration: .default).uploadTask(with: request, from: ) {
+//            (data: Data?, response: URLResponse?, error: Error?) in
+//            guard error == nil else {
+//                print("Error occur: \(String(describing: error))")
+//                return
+//            }
+//            guard let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+//                return
+//            }
+//            guard let jsonToArray = try? JSONSerialization.jsonObject(with: data, options: []) else {
+//                print("json to Any Error")
+//                return
+//            }
+//            print(jsonToArray)
+//       }
+//       dataTask.resume()
     }
 
 }
