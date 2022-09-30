@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1= title
+  - var login= islogin
+    if login
+      p hello #{user_name}
+      a(href='/auth/logout') logout
+    else 
+      p Welcome to #{title}
+      a(href='/auth/login') login
+
