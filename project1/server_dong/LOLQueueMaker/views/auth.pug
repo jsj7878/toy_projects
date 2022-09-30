@@ -1,0 +1,62 @@
+extends layout
+
+block content
+  p login page
+  form(name='user_info' action='/auth/login_process' method='POST')
+    p
+        p nick name
+        input(type='text' name='nickname' placeholder='user name')
+    p
+        p sol rank
+        select(name='sol_rank_league')
+            option(value='Iron') Iron
+            option(value='Bronze') Bronze
+            option(value='Silver') Silver
+            option(value='Gold') Gold
+            option(value='platinum') Platinum
+            option(value='Diamon') Diamond
+            option(value='Master') Master
+            option(value='Grand_Master') Grand Master
+            option(value='Challenger') Challenger
+
+        select(name='sol_rank_num')
+            option(value="4") 4
+            option(value="3") 3
+            option(value="2") 2
+            option(value="1") 1
+
+        p free rank 
+        select(name='free_rank_league')
+            option(value='Iron') Iron
+            option(value='Bronze') Bronze
+            option(value='Silver') Silver
+            option(value='Gold') Gold
+            option(value='platinum') Platinum
+            option(value='Diamon') Diamond
+            option(value='Master') Master
+            option(value='Grand_Master') Grand Master
+            option(value='Challenger') Challenger
+
+        select(name='free_rank_num')
+            option(value="4") 4
+            option(value="3") 3
+            option(value="2") 2
+            option(value="1") 1
+    p
+        p ladder rank 
+        input(type='text' name='ladder_rank' placeholder='ex) 3123250')
+            
+    p
+        p position
+        select(name='position')
+            option(value='Top') Top
+            option(value="Middle") Middle
+            option(value="Jungle") Jungle
+            option(value="Buttom") Buttom
+            option(value="Support") Support
+    p
+        p self introduction 
+        input(type='text' name='description' placeholder='description')
+
+    p
+        input(type='submit')
