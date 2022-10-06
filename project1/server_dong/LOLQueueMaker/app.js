@@ -7,16 +7,6 @@ var compression = require('compression');
 var helmet = require('helmet');
 var session = require('express-session');
 var logger = require('morgan');
-var mysql = require('mysql');
-
-var connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'lolprojectmanager',
-  password: 'mysql903!',
-  database: 'LOLQueueMaker'
-});
-
-connection.connect();
 
 const { createConnection } = require('net');
 
@@ -28,11 +18,12 @@ app.set('view engine', 'pug');
 
 
 app.use(helmet());
-// app.use(bodyParser.urlencoded({extended: false}));
 app.use(compression());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -43,13 +34,16 @@ app.use(session({
 }));
 
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var authRouter = require('./routes/auth');
+// var indexRouter = require('./routes/index');
+var mainRouter = require('./routes/main')
+var userRouter = require('./routes/user');
+var roomRouter = require('./routes/room');
+// var authRouter = require('./routes/auth');
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/auth', authRouter);
+app.use('/', mainRouter);
+app.use('/user', userRouter);
+app.use('/room', roomRouter);
+// app.use('/auth', authRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
