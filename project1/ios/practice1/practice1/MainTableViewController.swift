@@ -7,14 +7,34 @@
 //
 
 import UIKit
+import Foundation
+
+
 
 class MainTableViewController: UITableViewController {
     var roomlist : [String] = []
     
+    private lazy var roomTable: UITableView = {
+        let tableView = UITableView()
+        
+        
+        return tableView
+    }()
+    
+    private func setupAutoLayout() {
+        
+        roomTable.translatesAutoresizingMaskIntoConstraints = false
+        roomTable.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        roomTable.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        roomTable.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        roomTable.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        guard let url = URL(string: "http://www.example.com") else {return}
+        view.addSubview(roomTable)
+        guard let url = URL(string: "http://192.168.42.215:5050") else {return}
         var request : URLRequest = URLRequest(url: url)
         request.httpMethod = "get"
         
@@ -60,28 +80,30 @@ class MainTableViewController: UITableViewController {
     
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let url = URL(string: "http://www.example.com") else {return}
+        guard let url = URL(string: "http://192.168.42.215:5050") else {return}
         
         var request : URLRequest = URLRequest(url: url)
         request.httpMethod = "post"
-       
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-//        let dataTask = URLSession(configuration: .default).uploadTask(with: request, from: ) {
-//            (data: Data?, response: URLResponse?, error: Error?) in
-//            guard error == nil else {
-//                print("Error occur: \(String(describing: error))")
-//                return
-//            }
-//            guard let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-//                return
-//            }
-//            guard let jsonToArray = try? JSONSerialization.jsonObject(with: data, options: []) else {
-//                print("json to Any Error")
-//                return
-//            }
-//            print(jsonToArray)
-//       }
-//       dataTask.resume()
+        let comment = PostComment(user_name: "dong", tier: "gold", position: "trash3")
+        guard let uploadData = try? JSONEncoder().encode(comment) else {return}
+        let dataTask = URLSession(configuration: .default).uploadTask(with: request, from: uploadData) {
+            (data: Data?, response: URLResponse?, error: Error?) in
+            guard error == nil else {
+                print("Error occur: \(String(describing: error))")
+                return
+            }
+            guard let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+                return
+            }
+            guard let jsonToArray = try? JSONSerialization.jsonObject(with: data, options: []) else {
+                print("json to Any Error")
+                return
+            }
+            print(jsonToArray)
+       }
+       dataTask.resume()
     }
 
 }
