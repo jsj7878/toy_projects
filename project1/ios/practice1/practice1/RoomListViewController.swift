@@ -81,7 +81,7 @@ final class RoomListViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        getRoomData()
+        //getRoomData()
         view.addSubview(upperImageView)
         view.addSubview(roomListTableView)
         view.addSubview(roomAddFloatingButton)
@@ -90,6 +90,11 @@ final class RoomListViewController: UIViewController{
         setAutoLayout()
         roomListTableView.register(UserTableViewCell.classForCoder(), forCellReuseIdentifier: "cell")
         roomListTableView.register(UserTableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: UserTableViewHeaderFooterView.headerViewId)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        getRoomData()
     }
     
     func setAutoLayout(){
@@ -118,47 +123,47 @@ final class RoomListViewController: UIViewController{
     }
 
     
-//    func getRoomData(){
-//        guard let url = URL(string: "http://192.168.43.119:3000/") else {return}
-//        var request : URLRequest = URLRequest(url: url)
-//        request.httpMethod = "get"
-//        let dataTask = URLSession(configuration: .default).dataTask(with: request) {
-//            (data: Data?, response: URLResponse?, error: Error?) in
-//            guard error == nil else {
-//                print("Error occur: \(String(describing: error))")
-//                return
-//            }
-//            DispatchQueue.main.async {
-//                guard let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 else {return}
-//                let decoder = JSONDecoder()
-//                if let json = try? decoder.decode([userInfo].self, from: data){
-//                    json.forEach{
-//                        self.userlist.append($0)
-//                    }
-//                }
-//                self.userlist.forEach{
-//                    self.roomlist.append($0.room_name)
-//                }
-//                var rl = Set<String>()
-//                self.roomlist = self.roomlist.filter{rl.insert($0).inserted}
-//                self.roomListTableView.reloadData()
-//            }
-//        }
-//        dataTask.resume()
-//    }
-    
     func getRoomData(){
-        userlist.append(userInfo(room_name: "자랭하실분 구합니다", master_name: "망치장인", tier_min: "bronze 5", tier_max: "gold 2", people_now: 3, people_max: 5, user_name: "망치장인", tier: "bronze 5", position: "buttom"))
-        userlist.append(userInfo(room_name: "자랭하실분 구합니다", master_name: "망치장인", tier_min: "bronze 5", tier_max: "gold 2", people_now: 3, people_max: 5, user_name: "이속잔나", tier: "silver 1", position: "support"))
-        userlist.append(userInfo(room_name: "자랭하실분 구합니다", master_name: "망치장인", tier_min: "bronze 5", tier_max: "gold 2", people_now: 3, people_max: 5, user_name: "삐오빠샤", tier: "silver 2", position: "mid"))
-        userlist.append(userInfo(room_name: "롤나나", master_name: "무무장인이정재", tier_min: "bronze 2", tier_max: "silver 3", people_now: 1, people_max: 5, user_name: "무무장인이정재", tier: "bronze 2", position: "jungle"))
-
-        userlist.forEach{
-            roomlist.append($0.room_name)
+        guard let url = URL(string: "http://192.168.43.119:3000/") else {return}
+        var request : URLRequest = URLRequest(url: url)
+        request.httpMethod = "get"
+        let dataTask = URLSession(configuration: .default).dataTask(with: request) {
+            (data: Data?, response: URLResponse?, error: Error?) in
+            guard error == nil else {
+                print("Error occur: \(String(describing: error))")
+                return
+            }
+            DispatchQueue.main.async {
+                guard let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 else {return}
+                let decoder = JSONDecoder()
+                if let json = try? decoder.decode([userInfo].self, from: data){
+                    json.forEach{
+                        self.userlist.append($0)
+                    }
+                }
+                self.userlist.forEach{
+                    self.roomlist.append($0.room_name)
+                }
+                var rl = Set<String>()
+                self.roomlist = self.roomlist.filter{rl.insert($0).inserted}
+                self.roomListTableView.reloadData()
+            }
         }
-        var rl = Set<String>()
-        roomlist = roomlist.filter{rl.insert($0).inserted}
+        dataTask.resume()
     }
+    
+//    func getRoomData(){
+//        userlist.append(userInfo(room_name: "자랭하실분 구합니다", master_name: "망치장인", tier_min: "bronze 5", tier_max: "gold 2", people_now: 3, people_max: 5, user_name: "망치장인", tier: "bronze 5", position: "buttom"))
+//        userlist.append(userInfo(room_name: "자랭하실분 구합니다", master_name: "망치장인", tier_min: "bronze 5", tier_max: "gold 2", people_now: 3, people_max: 5, user_name: "이속잔나", tier: "silver 1", position: "support"))
+//        userlist.append(userInfo(room_name: "자랭하실분 구합니다", master_name: "망치장인", tier_min: "bronze 5", tier_max: "gold 2", people_now: 3, people_max: 5, user_name: "삐오빠샤", tier: "silver 2", position: "mid"))
+//        userlist.append(userInfo(room_name: "롤나나", master_name: "무무장인이정재", tier_min: "bronze 2", tier_max: "silver 3", people_now: 1, people_max: 5, user_name: "무무장인이정재", tier: "bronze 2", position: "jungle"))
+//
+//        userlist.forEach{
+//            roomlist.append($0.room_name)
+//        }
+//        var rl = Set<String>()
+//        roomlist = roomlist.filter{rl.insert($0).inserted}
+//    }
     
     @objc func roomAddButtonTapped(){
         let nextView = AddRoomViewController()
@@ -179,13 +184,15 @@ final class RoomListViewController: UIViewController{
                 print("Error occur: \(String(describing: error))")
                 return
             }
-            guard let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                return
+            DispatchQueue.main.async {
+                guard let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 else {return}
+                let getRoomAccept = try! JSONDecoder().decode(accecptRoomInfo.self, from: data)
+                self.showDialog(check: getRoomAccept)
+                self.getRoomData()
             }
-            let getRoomAccept = try! JSONDecoder().decode(accecptRoomInfo.self, from: data)
-            self.showDialog(check: getRoomAccept)
         }
         dataTask.resume()
+        
     }
     
     func showDialog(check : accecptRoomInfo){

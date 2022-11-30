@@ -132,7 +132,7 @@ class UserInfoViewController: UIViewController {
     }
     
     @objc func enterButtonTapped(){
-        //sendToServer()
+        sendToServer()
         let nextView = RoomListViewController()
         nextView.modalPresentationStyle = .fullScreen
         self.present(nextView, animated: true, completion: nil)
@@ -168,7 +168,7 @@ class UserInfoViewController: UIViewController {
         tierDropDown.bottomOffset = CGPoint(x:0, y:(tierDropDown.anchorView?.plainView.bounds.height)!)
         tierDropDown.selectionAction = { [weak self] (index, item)in
             self?.userTier = item
-            self?.userTierDropDownButton.setTitle(" \(item)", for: .normal)
+            self?.userTierDropDownButton.setTitle("\(item)", for: .normal)
             self?.checkAllInfoCreated()
         }
     }
@@ -181,7 +181,7 @@ class UserInfoViewController: UIViewController {
         positionDropDown.bottomOffset = CGPoint(x:0, y:(positionDropDown.anchorView?.plainView.bounds.height)!)
         positionDropDown.selectionAction = { [weak self] (index, item)in
             self?.userPosition = item
-            self?.userPositionDropDownButton.setTitle(" \(item)", for: .normal)
+            self?.userPositionDropDownButton.setTitle("\(item)", for: .normal)
             self?.checkAllInfoCreated()
         }
     }
